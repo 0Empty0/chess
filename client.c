@@ -11,15 +11,13 @@
 #define BUFFER_SIZE 1024
 
 int main() {
-  struct sockaddr_in server;
-  char buffer[BUFFER_SIZE] = {0};
-  char message[BUFFER_SIZE];
-
   int sock = 0;
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("Socket creation error \n");
     return -1;
   }
+
+  struct sockaddr_in server;
 
   server.sin_family = AF_INET;
   server.sin_port = htons(PORT);
@@ -34,8 +32,10 @@ int main() {
     return -1;
   }
 
-  while (true) {
+  char message[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE];
 
+  while (true) {
     printf("Enter message: ");
     scanf("%s", message);
 

@@ -13,24 +13,20 @@
 #define BUFFER_SIZE 1024
 
 int main() {
-  int server, client_count = 0, client_sockets[] = {0, 0};
-  struct sockaddr_in address;
-  int addrlen = sizeof(address);
-  char buffer[BUFFER_SIZE];
-  int opt = 1;
-  int n;
-  int read_size;
-
+  int server;
   if ((server = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     perror("socket failed");
     exit(EXIT_FAILURE);
   }
 
+  int opt = 1;
   if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
                  sizeof(opt))) {
     perror("setsockopt");
     exit(EXIT_FAILURE);
   }
+
+  struct sockaddr_in address;
 
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
@@ -48,6 +44,9 @@ int main() {
 
   printf("Waiting for incoming connections...\n");
 
+  int addrlen = sizeof(address);
+  int client_count = 0, client_sockets[] = {0, 0};
+
   while (client_count < 2) {
     if ((client_sockets[client_count] = accept(
              server, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
@@ -58,6 +57,9 @@ int main() {
     printf("Client %d connected\n", client_count + 1);
     client_count++;
   }
+
+  char buffer[BUFFER_SIZE];
+  int read_size;
 
   while (true) {
     for (int i = 0; i < client_count; i++) {
