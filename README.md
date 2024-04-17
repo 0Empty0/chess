@@ -1,4 +1,5 @@
-# Here you can find implementation of chess on different languages
+# Chesses
+Here you can find implementation of chess on different languages
 
 ## List of languages:
 
